@@ -10,7 +10,10 @@ export default class Player
     jumpInProgress = false;
     isFalling = false;
     JUMP_SPEED = 0.6;
-    GRAVITY = 0.4;
+    BASE_GRAVITY = 0.4;
+    baseGravity = this.BASE_GRAVITY;
+    downArrowPressed = false;
+    gravityIncreased = false;
 
     constructor (context, width, height, 
                 minJumpHeight, maxJumpHeight, 
@@ -30,6 +33,10 @@ export default class Player
 
         this.standingStillImage = new Image();
         this.standingStillImage.src = "images/standing_still.png";
+        this.fallingDino = new Image();
+        this.fallingDino.src = "images/falling_dino.png"
+        this.surfingDino = new Image();
+        this.surfingDino.src = "images/surfing_dino.png"
         this.image = this.standingStillImage;
 
         const dinoRunImage1 = new Image();
@@ -58,6 +65,11 @@ export default class Player
         {
             this.jumpPressed = true;
         }
+        if (event.code === "ArrowDown")
+        {
+            this.downArrowPressed = true;
+            this.gravityIncreased = true;
+        }
     };
 
     keyup = (event) => 
@@ -65,6 +77,10 @@ export default class Player
         if (event.code === "Space")
         {
             this.jumpPressed = false;
+        }
+        if (event.code === "ArrowDown")
+        {
+            this.downArrowPressed = false;
         }
     };
 
@@ -80,7 +96,6 @@ export default class Player
 
     update(gameSpeed, frameTimeDelta)
     {
-        // console.log(this.jumpPressed);
         this.run(gameSpeed, frameTimeDelta);
         if (this.jumpInProgress)
         {
@@ -91,6 +106,10 @@ export default class Player
 
     jump(frameTimeDelta)
     {
+        if (this.gravityIncreased && this.jumpInProgress)
+        {
+            this.image = this.fallingDino;
+        }
         if (this.jumpPressed)
         {
             this.jumpInProgress = true;
@@ -100,7 +119,7 @@ export default class Player
             if (this.y > this.canvas.height - this.minJumpHeight ||
                 (this.y > this.canvas.height - this.maxJumpHeight && this.jumpPressed))
             {
-                this.y-= this.JUMP_SPEED * frameTimeDelta * this.scaleRatio;
+                this.y -= this.JUMP_SPEED * frameTimeDelta * this.scaleRatio;
             }
             else 
             {
@@ -111,7 +130,11 @@ export default class Player
         {
             if (this.y < this.yStandingPosition)
             {
-                this.y += this.GRAVITY * frameTimeDelta * this.scaleRatio;
+                if (this.downArrowPressed)
+                {
+                    this.baseGravity *= 1.25;
+                }
+                this.y += this.baseGravity * frameTimeDelta * this.scaleRatio;
                 if (this.y + this.height > this.canvas.height)
                 {
                     this.y = this.yStandingPosition;
@@ -121,13 +144,23 @@ export default class Player
             {
                 this.isFalling = false;
                 this.jumpInProgress = false;
+                this.baseGravity = this.BASE_GRAVITY;
+                this.gravityIncreased = false;
             }
+        }
+    }
+
+    surf()
+    {
+        if (this.downArrowPressed && !this.isFalling)
+        {
+            this.image = this.surfingDino;
         }
     }
 
     run(gameSpeed, frameTimeDelta)
     {
-        if(this.walkAnimationTimer <=0)
+        if(this.walkAnimationTimer <=0 && !this.downArrowPressed)
         {
             if (this.image === this.dinoRunImages[0])
             {
@@ -140,6 +173,8 @@ export default class Player
 
             this.walkAnimationTimer = this.WALK_ANIMATION_TIMER;
         }
+
+        this.surf();
 
         this.walkAnimationTimer -= frameTimeDelta * gameSpeed;
     }
