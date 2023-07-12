@@ -56,7 +56,7 @@ export default class Pterodactyl
 
     collideWith(sprite)
     {
-        const adjustby = 1.4;
+        const adjustby = 2.0;
         if (
             sprite.x < this.x + this.width / adjustby &&
             sprite.x + sprite.width / adjustby > this.x &&
