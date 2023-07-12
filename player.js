@@ -66,7 +66,10 @@ export default class Player
         {
             this.jumpPressed = true;
         }
-        if (event.code === "ArrowDown")
+        // P here is used functionally as a down arrow and 'downArrow' best describes it
+        // It can cause scroll issues though so P is used instead but henceforth
+        // P will be referred to as 'dwonArrow'
+        if (event.code === "KeyP")
         {
             this.downArrowPressed = true;
             this.gravityIncreased = true;
@@ -79,7 +82,7 @@ export default class Player
         {
             this.jumpPressed = false;
         }
-        if (event.code === "ArrowDown")
+        if (event.code === "KeyP")
         {
             this.downArrowPressed = false;
         }
