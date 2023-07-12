@@ -174,7 +174,7 @@ function showStartGameText()
     context.fillStyle = "grey";
     const x = canvas.width / 14;
     const y = canvas.height / 2;
-    context.fillText("And So It Begins...", x, y);
+    context.fillText("Space to Jump, Down Arrow to Fall", x, y);
 }
 
 function updateGameSpeed(frameTimeDelta)
@@ -225,6 +225,7 @@ function clearScreen()
 
 function gameLoop(currentTime)
 {
+    
     // This defines delta time
     if (previousTime === null)
     {

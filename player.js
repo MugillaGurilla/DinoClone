@@ -14,6 +14,7 @@ export default class Player
     baseGravity = this.BASE_GRAVITY;
     downArrowPressed = false;
     gravityIncreased = false;
+    isSurfing = false;
 
     constructor (context, width, height, 
                 minJumpHeight, maxJumpHeight, 
