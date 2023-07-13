@@ -174,7 +174,7 @@ function showStartGameText()
     context.fillStyle = "grey";
     const x = canvas.width / 14;
     const y = canvas.height / 2;
-    context.fillText("Space to Jump, P to Fall", x, y);
+    context.fillText("O to Jump, P to Fall", x, y);
 }
 
 function updateGameSpeed(frameTimeDelta)
